@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateContactRequest;
 
 use Inertia\Inertia;
 
+use Illuminate\Http\Request;
+
+
 class ContactController extends Controller
 {
 
@@ -21,12 +24,16 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $contacts = Contact::with('organization')->paginate();
+        $filters = $request->all('search');
 
-        return Inertia::render('Contacts/Index', compact('contacts'));
+        $contacts = Contact::with('organization')
+                    ->filter($filters)
+                    ->paginate();
+
+        return Inertia::render('Contacts/Index', compact('contacts', 'filters'));
     }
 
     /**

@@ -13,6 +13,11 @@
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+
+                            <div class="px-6 py-4">
+                                <Input v-model="search" type="text" class="w-full" placeholder="Ingres texto para filtrar" />
+                            </div>
+
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -66,17 +71,32 @@
 
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Pagination from '@/Components/Pagination.vue'
-
+import Input from '@/Jetstream/Input.vue'
+import pickBy from 'lodash/pickBy'
 
 export default {
 
     components: {
         AppLayout,
-        Pagination
+        Pagination,
+        Input
+    },
+
+    data() {
+        return {
+            search: this.filters.search,
+        }
+    },
+
+    watch: {
+        search($value) {
+            this.$inertia.get('/contacts', pickBy({ search: $value }), { preserveState: true })
+        }
     },
 
     props: {
-        contacts: Object
+        filters: Object,
+        contacts: Object,
     }
 
 }
