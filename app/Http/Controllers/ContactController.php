@@ -31,6 +31,7 @@ class ContactController extends Controller
 
         $contacts = Contact::with('organization')
                     ->filter($filters)
+                    ->latest('id')
                     ->paginate();
 
         return Inertia::render('Contacts/Index', compact('contacts', 'filters'));
@@ -43,7 +44,11 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Contacts/Create');
+
+        $organizations = \App\Models\Organization::all();
+        $countries = \App\Models\Country::all();
+
+        return Inertia::render('Contacts/Create', compact('organizations', 'countries'));
     }
 
     /**
@@ -52,9 +57,26 @@ class ContactController extends Controller
      * @param  \App\Http\Requests\StoreContactRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreContactRequest $request)
+    public function store(Request $request)
     {
-        //
+
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'country_id' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'postal_code' => 'required',
+            'organization_id' => 'required',
+        ]);
+
+        $contact = Contact::create($data);
+
+        return redirect()->route('contacts.edit', $contact);
+
     }
 
     /**
