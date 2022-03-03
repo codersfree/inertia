@@ -46,9 +46,9 @@
                                             {{contact.phone}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">
+                                            <Link :href="route('contacts.edit', contact)" class="text-indigo-600 hover:text-indigo-900">
                                                 <i class="fas fa-chevron-right"></i>
-                                            </a>
+                                            </Link>
                                         </td>
                                     </tr>
 
